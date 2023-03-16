@@ -10,8 +10,19 @@ import 'error_codes.dart';
 
 enum BiometricType { face, fingerprint, iris, weak, strong }
 
+enum DeviceBiometricStatus {
+  permissionNotGranted(permissionNotGrantedStatus),
+  permissionGranted(permissionGrantedStatus),
+  biometricNotEnrolled(biometricNotEnrolledStatus),
+  otherException(otherExceptionStatus);
+
+  const DeviceBiometricStatus(this.status);
+  final String status;
+}
+
 class Biometric {
   static const MethodChannel _channel = const MethodChannel('biometric');
+  static const _isBiometricEnrolled = 'checkDeviceBiometricStatus';
 
   Platform _platform = const LocalPlatform();
 
@@ -198,5 +209,35 @@ class Biometric {
       }
     });
     return biometrics;
+  }
+
+  static Future<bool> get hasEnrolledBiometric async =>
+      await deviceBiometricStatus() == DeviceBiometricStatus.permissionGranted;
+
+  static Future<DeviceBiometricStatus> deviceBiometricStatus() async {
+    DeviceBiometricStatus biometricStatus =
+        DeviceBiometricStatus.otherException;
+    try {
+      final bool result = await _channel.invokeMethod(_isBiometricEnrolled);
+      if (result) {
+        biometricStatus = DeviceBiometricStatus.permissionGranted;
+      }
+      return biometricStatus;
+    } on PlatformException catch (error) {
+      biometricStatus = _biometricStatusException(error);
+    }
+    return biometricStatus;
+  }
+
+  static DeviceBiometricStatus _biometricStatusException(
+      PlatformException error) {
+    switch (error.message) {
+      case permissionNotGrantedStatus:
+        return DeviceBiometricStatus.permissionNotGranted;
+      case biometricNotEnrolledStatus:
+        return DeviceBiometricStatus.biometricNotEnrolled;
+      default:
+        return DeviceBiometricStatus.otherException;
+    }
   }
 }

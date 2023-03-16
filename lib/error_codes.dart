@@ -21,3 +21,10 @@ const String permanentlyLockedOut = 'PermanentlyLockedOut';
 const String errorInvalidated = "biometrics_invalidated";
 
 const String errorKeySign = "sign_error_key";
+
+const String permissionNotGrantedStatus =
+    'User has denied the use of biometry for this app.';
+const String permissionGrantedStatus =
+    'User has enrolled for biometric in device';
+const String biometricNotEnrolledStatus = 'No identities are enrolled.';
+const String otherExceptionStatus = 'Other exception with no message';
