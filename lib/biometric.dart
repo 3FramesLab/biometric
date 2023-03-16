@@ -26,7 +26,7 @@ class Biometric {
 
   Platform _platform = const LocalPlatform();
 
-  static Future<String> get platformVersion async {
+  Future<String> get platformVersion async {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
@@ -211,10 +211,10 @@ class Biometric {
     return biometrics;
   }
 
-  static Future<bool> get hasEnrolledBiometric async =>
+  Future<bool> get hasEnrolledBiometric async =>
       await deviceBiometricStatus() == DeviceBiometricStatus.permissionGranted;
 
-  static Future<DeviceBiometricStatus> deviceBiometricStatus() async {
+  Future<DeviceBiometricStatus> deviceBiometricStatus() async {
     DeviceBiometricStatus biometricStatus =
         DeviceBiometricStatus.otherException;
     try {
@@ -229,8 +229,7 @@ class Biometric {
     return biometricStatus;
   }
 
-  static DeviceBiometricStatus _biometricStatusException(
-      PlatformException error) {
+  DeviceBiometricStatus _biometricStatusException(PlatformException error) {
     switch (error.message) {
       case permissionNotGrantedStatus:
         return DeviceBiometricStatus.permissionNotGranted;
