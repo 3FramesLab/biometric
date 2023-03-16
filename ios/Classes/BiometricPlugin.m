@@ -186,10 +186,10 @@
 - (void)isBiometricEnrolled:(FlutterResult)result {
     LAContext *context = self.createAuthContext;
       NSError *authError = nil;
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]){
-        result(true)
+    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]){
+        result(@YES)
     } else {
-        result(false)
+        result(@NO)
     }
 }
 
