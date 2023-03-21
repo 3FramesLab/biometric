@@ -187,9 +187,9 @@
     LAContext *context = self.createAuthContext;
       NSError *authError = nil;
     if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]){
-        result(@YES)
+        result(@YES);
     } else {
-        result(@NO)
+        result(@NO);
     }
 }
 
