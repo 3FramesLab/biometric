@@ -185,11 +185,23 @@
 
 - (void)isBiometricEnrolled:(FlutterResult)result {
     LAContext *context = self.createAuthContext;
-      NSError *authError = nil;
+    NSError *authError = nil;
     if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&authError]){
         result(@YES);
     } else {
+       if (authError == nil) {
         result(@NO);
+        return;
+       }else{
+        NSString *errorMessage = authError.localizedDescription;
+        if (authError.userInfo[@"NSDebugDescription"] != nil) {
+              errorMessage = authError.userInfo[@"NSDebugDescription"];
+          }
+          result([FlutterError errorWithCode:[@(authError.code) stringValue]
+                               message:authError.localizedDescription
+                               details:authError.domain]);
+       }
+        
     }
 }
 
