@@ -133,54 +133,54 @@
 
 - (void)authenticateWithBiometrics:(NSDictionary *)arguments
                  withFlutterResult:(FlutterResult)result {
-    LAContext *context = [[LAContext alloc] init];
-    NSError *authError = nil;
-    self.lastCallArgs = nil;
-    self.lastResult = nil;
-    context.localizedFallbackTitle = @"";
-    
-    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
-                             error:&authError]) {
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
-                localizedReason:arguments[@"localizedReason"]
-                          reply:^(BOOL success, NSError *error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                                      [self handleAuthReplyWithSuccess:success
-                                                                 error:error
-                                                      flutterArguments:arguments
-                                                         flutterResult:result];
-                                    });
-        }];
-    } else {
-        [self handleErrors:authError flutterArguments:arguments withFlutterResult:result];
-    }
+    LAContext *context = self.createAuthContext;
+  NSError *authError = nil;
+  self.lastCallArgs = nil;
+  self.lastResult = nil;
+  context.localizedFallbackTitle = arguments[@"localizedFallbackTitle"] == [NSNull null]
+                                       ? nil
+                                       : arguments[@"localizedFallbackTitle"];
+
+  if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+                           error:&authError]) {
+    [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+            localizedReason:arguments[@"localizedReason"]
+                      reply:^(BOOL success, NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                          [self handleAuthReplyWithSuccess:success
+                                                     error:error
+                                          flutterArguments:arguments
+                                             flutterResult:result];
+                        });
+                      }];
+  } else {
+    [self handleErrors:authError flutterArguments:arguments withFlutterResult:result];
+  }
 }
 
 - (void)authenticate:(NSDictionary *)arguments withFlutterResult:(FlutterResult)result {
-    LAContext *context = [[LAContext alloc] init];
-    NSError *authError = nil;
-    _lastCallArgs = nil;
-    _lastResult = nil;
-    context.localizedFallbackTitle = @"";
-    
-    if (@available(iOS 9.0, *)) {
-        if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&authError]) {
-            [context evaluatePolicy:kLAPolicyDeviceOwnerAuthentication
-                    localizedReason:arguments[@"localizedReason"]
-                              reply:^(BOOL success, NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                                          [self handleAuthReplyWithSuccess:success
-                                                                     error:error
-                                                          flutterArguments:arguments
-                                                             flutterResult:result];
-                                        });
-            }];
-        } else {
-            [self handleErrors:authError flutterArguments:arguments withFlutterResult:result];
-        }
-    } else {
-        // Fallback on earlier versions
-    }
+   LAContext *context = self.createAuthContext;
+  NSError *authError = nil;
+  _lastCallArgs = nil;
+  _lastResult = nil;
+  context.localizedFallbackTitle = arguments[@"localizedFallbackTitle"] == [NSNull null]
+                                       ? nil
+                                       : arguments[@"localizedFallbackTitle"];
+
+  if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:&authError]) {
+    [context evaluatePolicy:kLAPolicyDeviceOwnerAuthentication
+            localizedReason:arguments[@"localizedReason"]
+                      reply:^(BOOL success, NSError *error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                          [self handleAuthReplyWithSuccess:success
+                                                     error:error
+                                          flutterArguments:arguments
+                                             flutterResult:result];
+                        });
+                      }];
+  } else {
+    [self handleErrors:authError flutterArguments:arguments withFlutterResult:result];
+  }
 }
 
 - (void)isBiometricEnrolled:(FlutterResult)result {
