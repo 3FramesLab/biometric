@@ -198,7 +198,7 @@
               errorMessage = authError.userInfo[@"NSDebugDescription"];
           }
           result([FlutterError errorWithCode:[@(authError.code) stringValue]
-                               message:authError.localizedDescription
+                               message:errorMessage
                                details:authError.domain]);
        }
         
