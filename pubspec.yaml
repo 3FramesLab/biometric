@@ -9,9 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  platform: ^3.0.0
-  flutter_plugin_android_lifecycle: ^2.0.1
-  intl: ^0.18.0
+  platform: ^3.1.6
+  flutter_plugin_android_lifecycle: ^2.0.23
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:

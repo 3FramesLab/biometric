@@ -16,8 +16,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final Biometric auth = Biometric();
   _SupportState _supportState = _SupportState.unknown;
-  bool _canCheckBiometrics;
-  List<BiometricType> _availableBiometrics;
+  bool? _canCheckBiometrics;
+  List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
 
