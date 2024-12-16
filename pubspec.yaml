@@ -1,6 +1,6 @@
 name: biometric
 description: A new flutter plugin project.
-version: 1.0.3
+version: 1.0.4
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
